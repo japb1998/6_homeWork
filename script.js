@@ -7,11 +7,12 @@ var key = 'f055730f6bf5880a78764b59ff3e1dff'
 storedArray = JSON.parse(localStorage.getItem('cities'));
 console.log(storedArray);
 //this will check if localStorage has anything on
-if(Array.isArray(storedArray)){
+if (Array.isArray(storedArray)) {
     citiesArray = storedArray;
 }
 generateCity();
-function giveMeFive(city){
+
+function giveMeFive(city) {
     $('.fiveDays').empty();
     $.ajax({
         url: `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=e6283d37d723963b63a443d7e415a531`,
@@ -22,7 +23,7 @@ function giveMeFive(city){
             var fiveDays = res.list;
             console.log(fiveDays)
             for (var i = 0; i < res.list.length; i += 8) {
-               var container = $('<div class="col-md-3 col-sm-6 weather">');
+                var container = $('<div class="col-md-3 col-sm-6 weather">');
                 var dateDiv = $('<div>');
                 var tempDiv = $('<div>');
                 var humDiv = $('<div>');
@@ -51,42 +52,44 @@ function generateCity() {
     citiesArray.forEach(function (city) {
         var cityDiv = $('<div>');
         cityDiv.addClass(`cityList`)
-        cityDiv.attr('id', `${city}`)
+        cityDiv.attr('id', city)
         cityDiv.text(city);
         $('.city-display').append(cityDiv);
 
 
 
     });
-    var tempDiv = $('<div class ="temp">');
-    var humDiv = $('<div class="humidity" >');
-    var windDiv = $('<div class="wind">');
-    var uvDiv = $('<div>');
-    var uvSpan = $('<span class="uv">');
-    //asigning the city
     cityExample = citiesArray[citiesArray.length - 1];
-    //Url for the api
-    currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityExample}&units=imperial&appid=${key}`;
-    $.ajax({
-        'url': currentUrl,
-        'method': 'GET'
-    }).then(function (res) {
-        console.log(res);
-        tempDiv.text(`Tempeture:${res.main.temp}F`);
-        humDiv.text(`Humidity:${res.main.humidity}%`);
-        windDiv.text(`Wind:${res.wind.speed}MPH`);
-        $.ajax({url:`http://api.openweathermap.org/data/2.5/uvi?lat=${res.coord.lat}&lon=${res.coord.lon}&appid=${key}`,
-    method:'GET'}).then(function(response){console.log(response);
-    uvSpan.text(`${response.value}`);
-    uvDiv.text('UV Index: ').append(uvSpan)
-    if (parseInt(response.value) > 5 ){ uvSpan.attr('style',"background-color : red")} else { uvSpan.attr('style',"background-color : green")}
-});
-        // uvDiv.text(res.)
+    displayWeather(cityExample);
+    //     var tempDiv = $('<div class ="temp">');
+    //     var humDiv = $('<div class="humidity" >');
+    //     var windDiv = $('<div class="wind">');
+    //     var uvDiv = $('<div>');
+    //     var uvSpan = $('<span class="uv">');
+    //     //asigning the city
 
-        // weatherDiv.text(JSON.stringify(res));
-        $('.weatherDisplay').append(tempDiv).append(humDiv).append(windDiv).append(uvDiv);
-        giveMeFive(cityExample);
-    })
+    //     //Url for the api
+    //     currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityExample}&units=imperial&appid=${key}`;
+    //     $.ajax({
+    //         'url': currentUrl,
+    //         'method': 'GET'
+    //     }).then(function (res) {
+    //         console.log(res);
+    //         tempDiv.text(`Tempeture:${res.main.temp}F`);
+    //         humDiv.text(`Humidity:${res.main.humidity}%`);
+    //         windDiv.text(`Wind:${res.wind.speed}MPH`);
+    //         $.ajax({url:`http://api.openweathermap.org/data/2.5/uvi?lat=${res.coord.lat}&lon=${res.coord.lon}&appid=${key}`,
+    //     method:'GET'}).then(function(response){console.log(response);
+    //     uvSpan.text(`${response.value}`);
+    //     uvDiv.text('UV Index: ').append(uvSpan)
+    //     if (parseInt(response.value) > 5 ){ uvSpan.attr('style',"background-color : red")} else { uvSpan.attr('style',"background-color : green")}
+    // });
+    //         // uvDiv.text(res.)
+
+    //         // weatherDiv.text(JSON.stringify(res));
+    //         $('.weatherDisplay').append(tempDiv).append(humDiv).append(windDiv).append(uvDiv);
+    //         giveMeFive(cityExample);
+    //     })
 
 
 };
@@ -95,21 +98,21 @@ function pushCities() {
     var storedCity = cityInput.val().toLowerCase();
     cityInput.val('');
     citiesArray.push(storedCity);
-    localStorage.setItem('cities',JSON.stringify(citiesArray));
+    localStorage.setItem('cities', JSON.stringify(citiesArray));
     generateCity();
 }
 
 
-//Generates the Weather once we click it 
-function displayWeather(e) {
+
+function displayWeather(cityName) {
     $('.weatherDisplay').empty();
     var tempDiv = $('<div class ="temp">');
     var humDiv = $('<div class="humidity" >');
     var windDiv = $('<div class="wind">');
     var uvDiv = $('<div>');
     var uvSpan = $('<span class="uv">');
-    var weatherClass = $(e.target).attr('id')
-    currentUrl = currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${weatherClass}&units=imperial&appid=${key}`
+    // var weatherClass = $(e.target).attr('id')
+    currentUrl = currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&appid=${key}`
     $.ajax({
         'url': currentUrl,
         'method': 'GET'
@@ -119,17 +122,27 @@ function displayWeather(e) {
         humDiv.text(`Humidity:${res.main.humidity}%`);
         windDiv.text(`Wind:${res.wind.speed} MPH`);
         // uvDiv.text(res.)
-        $.ajax({url:`http://api.openweathermap.org/data/2.5/uvi?lat=${res.coord.lat}&lon=${res.coord.lon}&appid=${key}`,
-        method:'GET'}).then(function(response){console.log(response);
+        $.ajax({
+            url: `http://api.openweathermap.org/data/2.5/uvi?lat=${res.coord.lat}&lon=${res.coord.lon}&appid=${key}`,
+            method: 'GET'
+        }).then(function (response) {
+            console.log(response);
             uvSpan.text(`${response.value}`);
             uvDiv.text('UV Index:').append(uvSpan)
-        if (parseInt(response.value) > 5 ){ uvSpan.attr('style',"background-color : red")} else { uvSpan.attr('style',"background-color : green")}})
+            if (parseInt(response.value) > 5) {
+                uvSpan.attr('style', "background-color : red")
+            } else {
+                uvSpan.attr('style', "background-color : green")
+            }
+        })
         // weatherDiv.text(JSON.stringify(res));
         $('.weatherDisplay').append(tempDiv).append(humDiv).append(windDiv).append(uvDiv);
     })
-giveMeFive(weatherClass);
+    giveMeFive(cityName);
 
 }
 
 $(document).on('click', '#city-button', pushCities);
-$(document).on('click', '.cityList', displayWeather);
+$(document).on('click', '.cityList', function (e) {
+    displayWeather($(e.target).attr('id'))
+});
