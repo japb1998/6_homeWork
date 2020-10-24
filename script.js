@@ -123,7 +123,7 @@ function displayWeather(cityName) {
         windDiv.text(`Wind:${res.wind.speed} MPH`);
         // uvDiv.text(res.)
         $.ajax({
-            url: `http://api.openweathermap.org/data/2.5/uvi?lat=${res.coord.lat}&lon=${res.coord.lon}&appid=${key}`,
+            url: `https://api.openweathermap.org/data/2.5/uvi?lat=${res.coord.lat}&lon=${res.coord.lon}&appid=${key}`,
             method: 'GET'
         }).then(function (response) {
             console.log(response);
