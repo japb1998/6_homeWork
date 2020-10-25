@@ -61,36 +61,7 @@ function generateCity() {
     });
     cityExample = citiesArray[citiesArray.length - 1];
     displayWeather(cityExample);
-    //     var tempDiv = $('<div class ="temp">');
-    //     var humDiv = $('<div class="humidity" >');
-    //     var windDiv = $('<div class="wind">');
-    //     var uvDiv = $('<div>');
-    //     var uvSpan = $('<span class="uv">');
-    //     //asigning the city
-
-    //     //Url for the api
-    //     currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityExample}&units=imperial&appid=${key}`;
-    //     $.ajax({
-    //         'url': currentUrl,
-    //         'method': 'GET'
-    //     }).then(function (res) {
-    //         console.log(res);
-    //         tempDiv.text(`Tempeture:${res.main.temp}F`);
-    //         humDiv.text(`Humidity:${res.main.humidity}%`);
-    //         windDiv.text(`Wind:${res.wind.speed}MPH`);
-    //         $.ajax({url:`http://api.openweathermap.org/data/2.5/uvi?lat=${res.coord.lat}&lon=${res.coord.lon}&appid=${key}`,
-    //     method:'GET'}).then(function(response){console.log(response);
-    //     uvSpan.text(`${response.value}`);
-    //     uvDiv.text('UV Index: ').append(uvSpan)
-    //     if (parseInt(response.value) > 5 ){ uvSpan.attr('style',"background-color : red")} else { uvSpan.attr('style',"background-color : green")}
-    // });
-    //         // uvDiv.text(res.)
-
-    //         // weatherDiv.text(JSON.stringify(res));
-    //         $('.weatherDisplay').append(tempDiv).append(humDiv).append(windDiv).append(uvDiv);
-    //         giveMeFive(cityExample);
-    //     })
-
+    
 
 };
 //push to the array
@@ -142,7 +113,8 @@ function displayWeather(cityName) {
 
 }
 
-$(document).on('click', '#city-button', pushCities);
+$(document).on('click', '#city-button', function (){
+  if($('.city-input').val()){ pushCities()} else {return ;}});
 $(document).on('click', '.cityList', function (e) {
     displayWeather($(e.target).attr('id'))
 });
